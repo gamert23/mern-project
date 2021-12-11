@@ -1,13 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 function App() {
   return (
-    <Container>
+    <Container className='p-5'>
       <h1> Hello World </h1>
 
-      <Button> Bootstrap </Button>
+      <a className='btn btn-primary' href='/create'> Create blog </a>
     </Container>
   );
 }
