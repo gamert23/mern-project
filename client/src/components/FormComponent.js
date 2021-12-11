@@ -1,5 +1,8 @@
 import { Button, Container, Form } from 'react-bootstrap';
 import { useState } from 'react';
+import NavBarComponent from './NavBarComponent';
+
+import axios from 'axios'
 
 const FormComponent = () => {
   const  [state, setState] = useState({
@@ -14,40 +17,54 @@ const FormComponent = () => {
     setState({...state, [name]: e.target.value})
   }
 
-  const submitData = () => {
-    console.log(state)
+  const submitData = (e) => {
+    e.preventDefault()
+
+    axios.post(`${ process.env.REACT_APP_API_URL }/create`, {
+      title,
+      content,
+      author
+    }).then((res) => {
+      alert('Create blog successfully!')
+    }).catch((err) => {
+      alert(err.response.data.error)
+    })
   }
 
   return (
-    <Container className='p-5'>
-      <h1> Create Blog </h1>
-      <Form>
-        <Form.Group className="mb-3">
-          <Form.Label> Title </Form.Label>
-          <Form.Control type="text" name="title" value={title} placeholder="Enter Title" onChange={ (e) => inputValue(e, "title") } />
-        </Form.Group>
+    <>
+      <NavBarComponent />
+      
+      <Container className='p-5'>
+        <h1> Create Blog </h1>
+        <Form onSubmit={ submitData }>
+          <Form.Group className="mb-3">
+            <Form.Label> Title </Form.Label>
+            <Form.Control type="text" name="title" value={title} placeholder="Enter Title" onChange={ (e) => inputValue(e, "title") } />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label> Content </Form.Label>
-          <Form.Control
-            as="textarea"
-            placeholder="Enter Content"
-            style={{ height: '100px' }}
-            value={content}
-            onChange={ (e) => inputValue(e, "content") }
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label> Content </Form.Label>
+            <Form.Control
+              as="textarea"
+              placeholder="Enter Content"
+              style={{ height: '100px' }}
+              value={content}
+              onChange={ (e) => inputValue(e, "content") }
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label> Author </Form.Label>
-          <Form.Control type="text" name='author' value={author} placeholder="ex. Admin" onChange={ (e) => inputValue(e, "author") } />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label> Author </Form.Label>
+            <Form.Control type="text" name='author' value={author} placeholder="ex. Admin" onChange={ (e) => inputValue(e, "author") } />
+          </Form.Group>
 
-        <Button variant="success" type="button" onClick={ submitData }>
-          Submit
-        </Button>
-      </Form>
-    </Container>
+          <Button variant="success" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Container>
+    </>
   );
 }
 

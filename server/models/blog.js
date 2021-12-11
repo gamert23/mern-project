@@ -18,7 +18,10 @@ const blogSchema = mongoose.Schema({
     required: true,
     lowercase: true,
     unique: true
-  }
+  },
+  category: {
+    type: String,
+  },
 }, { timestamps: true })
 
 module.exports = mongoose.model("Blogs", blogSchema)

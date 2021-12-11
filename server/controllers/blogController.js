@@ -26,7 +26,7 @@ exports.create = (req, res) => {
   }, (err, blog) => {
     if(err) {
       return res.status(400).json({
-        error: err
+        error: "Create blog with incorrect data!"
       })
     }
 

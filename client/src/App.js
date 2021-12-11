@@ -1,13 +1,17 @@
 import './App.css';
 import { Container } from 'react-bootstrap';
+import NavBarComponent from './components/NavBarComponent';
 
 function App() {
   return (
-    <Container className='p-5'>
-      <h1> Hello World </h1>
+    <>
+      <NavBarComponent />
+      <Container className='p-5'>
+        <h1> Hello World </h1>
 
-      <a className='btn btn-primary' href='/create'> Create blog </a>
-    </Container>
+        <a className='btn btn-primary' href='/create'> Create blog </a>
+      </Container>
+    </>
   );
 }
 
