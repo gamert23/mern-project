@@ -4,18 +4,27 @@ import NavBarComponent from './NavBarComponent';
 
 import axios from 'axios'
 import swal from 'sweetalert2'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import { getUser } from '../services/authorize';
 
 const FormComponent = () => {
   const  [state, setState] = useState({
     title: "",
-    content: "",
-    author: ""
+    author: getUser()
   })
-  const { title, content, author } = state
+  const { title, author } = state
+
+  // State for content
+  const [content, setContent] = useState('')
 
   // Event for state
   const inputValue = (e, name) => {
     setState({...state, [name]: e.target.value})
+  }
+
+  const submitContent = (e) => {
+    setContent(e)
   }
 
   const submitData = (e) => {
@@ -34,9 +43,9 @@ const FormComponent = () => {
 
       setState({ ...state,
         title: "",
-        content: "",
         author: " "
       })
+      setContent("")
     }).catch((err) => {
       swal.fire(
         'Oops!',
@@ -60,13 +69,14 @@ const FormComponent = () => {
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label> Content </Form.Label>
-            <Form.Control
+            <ReactQuill value={ content } onChange={ submitContent } theme='snow' placeholder='Enter Content' /> 
+            {/* <Form.Control
               as="textarea"
               placeholder="Enter Content"
               style={{ height: '100px' }}
               value={content}
               onChange={ (e) => inputValue(e, "content") }
-            />
+            /> */}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">

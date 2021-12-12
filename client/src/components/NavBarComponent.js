@@ -1,19 +1,40 @@
-import { Container, Nav } from 'react-bootstrap'
+import { Button, Container, Nav } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { withRouter } from '../services/withRouter'
+import { getUser, logout } from '../services/authorize';
 
-const NavBarComponent = () => {
+const NavBarComponent = (props) => {
+  const goToHome = () => {
+    props.navigate('/')
+  }
+
   return (
     <Container className='pt-5 pt-0'>
       <Nav>
         <Nav.Item>
-          <Nav.Link href="/"> Home </Nav.Link>
+          <Link className='nav-link' to="/"> Home </Link>
         </Nav.Item>
 
-        <Nav.Item>
-          <Nav.Link href="/create"> Create Blog </Nav.Link>
-        </Nav.Item>
+        {
+          !getUser() ? (
+            <Nav.Item>
+              <Link className='nav-link' to="/login"> Login </Link>
+            </Nav.Item>
+          ) : (
+            <>
+              <Nav.Item>
+                <Link className='nav-link' to="/create"> Create Blog </Link>
+              </Nav.Item>
+
+              <Nav.Item>
+                <Button variant='danger' onClick={ () => logout(goToHome) }> Logout </Button>
+              </Nav.Item>
+            </>
+          )
+        }
       </Nav>
     </Container>
   )
 }
 
-export default NavBarComponent;
+export default withRouter(NavBarComponent);

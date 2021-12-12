@@ -1,11 +1,15 @@
 import './App.css';
 import '../src/scss/main.scss';
 import { useState, useEffect } from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { getUser } from './services/authorize';
+import { withRouter } from './services/withRouter'; // HOC Component
 import NavBarComponent from './components/NavBarComponent';
 import axios from 'axios'
+import swal from 'sweetalert2'
 
-function App() {
+function App(props) {
   const [blogs, setBlogs] = useState([]);
 
   const fetchData = () => {
@@ -16,9 +20,35 @@ function App() {
     })
   }
 
+  const deleteBlog = (slug) => {
+    axios.delete(`${ process.env.REACT_APP_API_URL }/blog/${ slug }`).then((res) => {
+      swal.fire({
+        title: "Delete successfully",
+        icon: "success"
+      })
+      
+      fetchData()
+
+    }).catch((err) => {
+      alert(err)
+    })
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
+
+  const confirmDelete = (slug) => {
+    swal.fire({
+      title: "Delete this blog?",
+      icon: "warning",
+      showCancelButton: true
+    }).then((result) => {
+      if(result.isConfirmed) {
+        deleteBlog(slug)
+      }
+    });
+  }
 
   return (
     <>
@@ -29,9 +59,18 @@ function App() {
             return (
               <Row key={index} style={{ borderBottom: "1px solid #ccc" }}>
                 <Col>
-                  <h2 className='pt-3'> { blog.title } </h2>
-                  <p className='content-text'> { blog.content } </p>
+                  <Link to={`/blog/${ blog.slug }`}> <h2 className='pt-3'> { blog.title } </h2> </Link>
+                  <p className='content-text' dangerouslySetInnerHTML={{__html: blog.content}}></p>
                   <p className='text-muted'> author: { blog.author }, created at: { new Date(blog.createdAt).toLocaleString('th-TH') } </p>
+
+                  {
+                    getUser() && (
+                      <>
+                        <Link className='btn btn-success mr-3' to={`blog/edit/${ blog.slug }`}> Update Blog </Link>
+                        <Button className='btn btn-danger' onClick={ () => confirmDelete(blog.slug) }> Remove Blog </Button>
+                      </>
+                    )
+                  }
                 </Col>
               </Row>
             )
@@ -42,4 +81,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);

@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 
 // Import Route
 const blogRoute = require('./routes/blog')
+const authRoute = require('./routes/auth')
 
 require('dotenv').config()
 
@@ -27,6 +28,7 @@ app.use(morgan("dev"))
 
 // Route
 app.use('/api', blogRoute)
+app.use('/api', authRoute)
 
 const port = process.env.PORT || 8080
 app.listen(port, () => {
