@@ -3,6 +3,7 @@ import { useState } from 'react';
 import NavBarComponent from './NavBarComponent';
 
 import axios from 'axios'
+import swal from 'sweetalert2'
 
 const FormComponent = () => {
   const  [state, setState] = useState({
@@ -25,9 +26,23 @@ const FormComponent = () => {
       content,
       author
     }).then((res) => {
-      alert('Create blog successfully!')
+      swal.fire(
+        'Congratulations!',
+        'Create blog successfully!',
+        'success'
+      )
+
+      setState({ ...state,
+        title: "",
+        content: "",
+        author: " "
+      })
     }).catch((err) => {
-      alert(err.response.data.error)
+      swal.fire(
+        'Oops!',
+        err.response.data.error,
+        'error'
+      )
     })
   }
 

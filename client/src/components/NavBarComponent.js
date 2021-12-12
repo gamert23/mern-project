@@ -2,7 +2,7 @@ import { Container, Nav } from 'react-bootstrap'
 
 const NavBarComponent = () => {
   return (
-    <Container className='pt-5'>
+    <Container className='pt-5 pt-0'>
       <Nav>
         <Nav.Item>
           <Nav.Link href="/"> Home </Nav.Link>
